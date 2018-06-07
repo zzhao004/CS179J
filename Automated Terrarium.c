@@ -766,12 +766,21 @@ void day_night_light_manual() {
 
 //turns on/off heating light every 30 minutes at the 45 and 15 minute mark of every hour
 void heat_light_SM() {
-	if(minutes == 45 && seconds == 30 && manual_activated == 0x00 ) {
+	if(minutes == 45 && seconds == 30 && manual_activated == 0x00 && eco_num != 0x01) {
 		PORTD = (PORTD ^ 0x02);
 	}
-	if(minutes == 15 && seconds == 30 && manual_activated == 0x00) {
+	if(minutes == 15 && seconds == 30 && manual_activated == 0x00 != 0x01) {
 		PORTD = (PORTD ^ 0x02);
 	}
+	
+	//sets different schedule for desert environment
+	if(minutes == 45 && seconds == 30 && manual_activated == 0x00 && eco_num == 0x01 && hours <= night) {
+		PORTD = (PORTD ^ 0x02);
+	}
+	if(minutes == 30 && seconds == 30 && manual_activated == 0x00 && eco_num == 0x01 && hours <= night) {
+		PORTD = (PORTD ^ 0x02);
+	}
+	
 	//if user manual activates a light, all lights will go back to automation at the 6 and 18 oclock hour
 	if(hours == evening && minutes == 0x00 && seconds == 0x00 && manual_activated == 0x01) {
 		manual_activated = 0x00;
